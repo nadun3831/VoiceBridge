@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VoiceBridge - Presets Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-primary": "#006970",
+                      "surface-variant": "#333538",
+                      "inverse-on-surface": "#2f3034",
+                      "on-primary-fixed": "#002022",
+                      "on-surface-variant": "#b9cacb",
+                      "surface-container-high": "#282a2d",
+                      "primary": "#dbfcff",
+                      "primary-container": "#00f0ff",
+                      "electric-cyan": "#00F0FF",
+                      "active-purple": "#7000FF",
+                      "on-error-container": "#ffdad6",
+                      "surface-container-low": "#1a1c1f",
+                      "surface-container-highest": "#333538",
+                      "on-background": "#e2e2e6",
+                      "tertiary-container": "#fed639",
+                      "slate-surface": "#1E2126",
+                      "secondary": "#d1bcff",
+                      "inverse-surface": "#e2e2e6",
+                      "on-secondary-container": "#ddcdff",
+                      "on-tertiary-fixed": "#231b00",
+                      "on-error": "#690005",
+                      "secondary-fixed": "#e9ddff",
+                      "background": "#111316",
+                      "surface-container": "#1e2023",
+                      "secondary-container": "#7000ff",
+                      "clipping-red": "#EF4444",
+                      "tertiary-fixed-dim": "#eac324",
+                      "surface-dim": "#111316",
+                      "outline-variant": "#3b494b",
+                      "on-secondary": "#3c0090",
+                      "surface": "#111316",
+                      "signal-green": "#22C55E",
+                      "on-surface": "#e2e2e6",
+                      "on-secondary-fixed": "#23005b",
+                      "tertiary-fixed": "#ffe179",
+                      "on-primary": "#00363a",
+                      "on-tertiary-container": "#715d00",
+                      "secondary-fixed-dim": "#d1bcff",
+                      "surface-container-lowest": "#0c0e11",
+                      "slate-border": "#2D3239",
+                      "on-primary-fixed-variant": "#004f54",
+                      "on-primary-container": "#006970",
+                      "error-container": "#93000a",
+                      "primary-fixed": "#7df4ff",
+                      "on-tertiary": "#3b2f00",
+                      "deep-charcoal": "#0B0C0E",
+                      "error": "#ffb4ab",
+                      "surface-tint": "#00dbe9",
+                      "primary-fixed-dim": "#00dbe9",
+                      "surface-bright": "#37393d",
+                      "on-secondary-fixed-variant": "#5700c9",
+                      "outline": "#849495",
+                      "on-tertiary-fixed-variant": "#554500",
+                      "tertiary": "#fff5de"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "rack-gap": "1rem",
+                      "meter-width": "12px",
+                      "control-stack": "0.5rem",
+                      "unit": "4px",
+                      "container-padding": "1.5rem"
+              },
+              "fontFamily": {
+                      "status-indicator": [
+                              "Inter"
+                      ],
+                      "mono-data": [
+                              "JetBrains Mono"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "label-caps": [
+                              "JetBrains Mono"
+                      ],
+                      "body-base": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "status-indicator": [
+                              "10px",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "800"
+                              }
+                      ],
+                      "mono-data": [
+                              "12px",
+                              {
+                                      "lineHeight": "1",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-caps": [
+                              "11px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.08em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-base": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+            },
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-deep-charcoal text-on-surface font-body-base min-h-screen flex flex-col overflow-hidden selection:bg-electric-cyan selection:text-deep-charcoal">
+<!-- TopAppBar -->
+<header class="bg-deep-charcoal border-b border-slate-border flex justify-between items-center px-container-padding h-16 w-full fixed top-0 z-40">
+<div class="flex items-center gap-4">
+<span class="font-display-lg text-display-lg text-electric-cyan uppercase tracking-tighter">VoiceBridge</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-6 py-2 border-2 border-signal-green text-signal-green font-headline-md text-headline-md rounded hover:bg-surface-container-high transition-colors active:scale-95 duration-75">
+                START ENGINE
+            </button>
+<button class="px-6 py-2 border-2 border-clipping-red text-clipping-red font-headline-md text-headline-md rounded hover:bg-surface-container-high transition-colors active:scale-95 duration-75">
+                STOP ENGINE
+            </button>
+</div>
+</header>
+<div class="flex flex-1 pt-16 pb-8 h-screen w-full">
+<!-- SideNavBar -->
+<nav class="bg-slate-surface border-r border-slate-border fixed left-0 top-16 bottom-8 w-[280px] flex flex-col h-[calc(100vh-6rem)] py-4 z-30">
+<div class="px-6 pb-6 border-b border-slate-border mb-4">
+<div class="font-label-caps text-label-caps text-on-surface-variant mb-1">ENGINE STATUS</div>
+<div class="font-headline-md text-headline-md text-electric-cyan flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-signal-green shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
+                    VIRTUAL MIC ACTIVE
+                </div>
+</div>
+<div class="flex-1 px-4 flex flex-col gap-2">
+<!-- Effects - Inactive -->
+<button class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-primary hover:bg-surface-variant rounded transition-all duration-150 ease-in-out w-full text-left">
+<span class="material-symbols-outlined" data-icon="tune">tune</span>
+<span class="font-label-caps text-label-caps">Effects</span>
+</button>
+<!-- Library - Active -->
+<button class="flex items-center gap-3 px-4 py-3 text-electric-cyan border-l-2 border-electric-cyan bg-surface-container-highest transition-all duration-150 ease-in-out w-full text-left rounded-r">
+<span class="material-symbols-outlined fill" data-icon="library_music">library_music</span>
+<span class="font-label-caps text-label-caps">Library</span>
+</button>
+<!-- Settings - Inactive -->
+<button class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:text-primary hover:bg-surface-variant rounded transition-all duration-150 ease-in-out w-full text-left">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-caps text-label-caps">Settings</span>
+</button>
+</div>
+<div class="px-6 pt-6 border-t border-slate-border mt-auto">
+<button class="w-full py-2 border border-slate-border bg-surface-container-highest text-on-surface font-label-caps text-label-caps rounded hover:bg-surface-variant transition-colors mb-6">
+                    INPUT SELECT
+                </button>
+<div class="flex flex-col gap-2">
+<button class="flex items-center gap-3 text-on-surface-variant hover:text-primary transition-colors text-left">
+<span class="material-symbols-outlined text-sm" data-icon="graphic_eq">graphic_eq</span>
+<span class="font-label-caps text-label-caps">Master</span>
+</button>
+<button class="flex items-center gap-3 text-on-surface-variant hover:text-primary transition-colors text-left">
+<span class="material-symbols-outlined text-sm" data-icon="headphones">headphones</span>
+<span class="font-label-caps text-label-caps">Monitor</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] flex-1 overflow-y-auto p-container-padding bg-background w-full h-full custom-scrollbar">
+<div class="max-w-6xl mx-auto h-full flex flex-col">
+<!-- Header -->
+<div class="flex justify-between items-center mb-8">
+<h1 class="font-display-lg text-display-lg text-on-surface">Presets</h1>
+<button class="bg-electric-cyan text-deep-charcoal font-label-caps text-label-caps px-6 py-3 rounded hover:bg-primary transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                        CREATE NEW
+                    </button>
+</div>
+<!-- Search -->
+<div class="mb-8 relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="w-full bg-deep-charcoal border border-slate-border text-on-surface font-mono-data text-mono-data py-3 pl-12 pr-4 rounded focus:outline-none focus:border-electric-cyan transition-colors placeholder:text-on-surface-variant" placeholder="Search presets..." type="text"/>
+</div>
+<!-- Preset Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-rack-gap">
+<!-- Card 1 -->
+<div class="bg-slate-surface border border-slate-border p-5 rounded hover:border-outline-variant transition-colors group flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded bg-surface-container-lowest flex items-center justify-center border border-slate-border text-active-purple">
+<span class="material-symbols-outlined" data-icon="water_drop">water_drop</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface-variant bg-surface-container-highest px-2 py-1 rounded">BASS</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 group-hover:text-electric-cyan transition-colors">Deep Voice</h3>
+<p class="font-mono-data text-mono-data text-on-surface-variant mb-6 flex-1">Pitch: -12st, Formant: -4, EQ: Low Boost</p>
+<button class="w-full border border-slate-border text-electric-cyan font-label-caps text-label-caps py-2 rounded hover:bg-electric-cyan hover:text-deep-charcoal transition-colors">LOAD</button>
+</div>
+<!-- Card 2 -->
+<div class="bg-slate-surface border border-slate-border p-5 rounded hover:border-outline-variant transition-colors group flex flex-col relative overflow-hidden">
+<div class="absolute inset-0 bg-electric-cyan/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+<div class="flex justify-between items-start mb-4 relative z-10">
+<div class="w-12 h-12 rounded bg-surface-container-lowest flex items-center justify-center border border-slate-border text-tertiary-fixed-dim">
+<span class="material-symbols-outlined" data-icon="air">air</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface-variant bg-surface-container-highest px-2 py-1 rounded">TREBLE</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 group-hover:text-electric-cyan transition-colors relative z-10">High Voice</h3>
+<p class="font-mono-data text-mono-data text-on-surface-variant mb-6 flex-1 relative z-10">Pitch: +12st, Formant: +4, EQ: High Boost</p>
+<button class="w-full border border-slate-border text-electric-cyan font-label-caps text-label-caps py-2 rounded hover:bg-electric-cyan hover:text-deep-charcoal transition-colors relative z-10">LOAD</button>
+</div>
+<!-- Card 3 -->
+<div class="bg-slate-surface border border-slate-border p-5 rounded hover:border-outline-variant transition-colors group flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded bg-surface-container-lowest flex items-center justify-center border border-slate-border text-clipping-red">
+<span class="material-symbols-outlined" data-icon="smart_toy">smart_toy</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface-variant bg-surface-container-highest px-2 py-1 rounded">FX</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 group-hover:text-electric-cyan transition-colors">Robot</h3>
+<p class="font-mono-data text-mono-data text-on-surface-variant mb-6 flex-1">Vocoder: On, Carrier: Sawtooth, Bands: 16</p>
+<button class="w-full border border-slate-border text-electric-cyan font-label-caps text-label-caps py-2 rounded hover:bg-electric-cyan hover:text-deep-charcoal transition-colors">LOAD</button>
+</div>
+<!-- Card 4 -->
+<div class="bg-slate-surface border border-slate-border p-5 rounded hover:border-outline-variant transition-colors group flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded bg-surface-container-lowest flex items-center justify-center border border-slate-border text-on-surface">
+<span class="material-symbols-outlined" data-icon="settings_input_antenna">settings_input_antenna</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface-variant bg-surface-container-highest px-2 py-1 rounded">LO-FI</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 group-hover:text-electric-cyan transition-colors">Radio</h3>
+<p class="font-mono-data text-mono-data text-on-surface-variant mb-6 flex-1">Filter: Bandpass, Distortion: 40%, Noise: 10%</p>
+<button class="w-full border border-slate-border text-electric-cyan font-label-caps text-label-caps py-2 rounded hover:bg-electric-cyan hover:text-deep-charcoal transition-colors">LOAD</button>
+</div>
+<!-- Card 5 -->
+<div class="bg-slate-surface border border-slate-border p-5 rounded hover:border-outline-variant transition-colors group flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded bg-surface-container-lowest flex items-center justify-center border border-slate-border text-secondary-fixed">
+<span class="material-symbols-outlined" data-icon="graphic_eq">graphic_eq</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface-variant bg-surface-container-highest px-2 py-1 rounded">DELAY</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 group-hover:text-electric-cyan transition-colors">Echo</h3>
+<p class="font-mono-data text-mono-data text-on-surface-variant mb-6 flex-1">Delay: 400ms, Feedback: 60%, Mix: 40%</p>
+<button class="w-full border border-slate-border text-electric-cyan font-label-caps text-label-caps py-2 rounded hover:bg-electric-cyan hover:text-deep-charcoal transition-colors">LOAD</button>
+</div>
+<!-- Card 6 -->
+<div class="bg-slate-surface border border-slate-border p-5 rounded hover:border-outline-variant transition-colors group flex flex-col">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded bg-surface-container-lowest flex items-center justify-center border border-slate-border text-primary-fixed">
+<span class="material-symbols-outlined" data-icon="blur_on">blur_on</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface-variant bg-surface-container-highest px-2 py-1 rounded">REVERB</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 group-hover:text-electric-cyan transition-colors">Space Reverb</h3>
+<p class="font-mono-data text-mono-data text-on-surface-variant mb-6 flex-1">Size: 100%, Decay: 8.5s, Pre-delay: 20ms</p>
+<button class="w-full border border-slate-border text-electric-cyan font-label-caps text-label-caps py-2 rounded hover:bg-electric-cyan hover:text-deep-charcoal transition-colors">LOAD</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest border-t border-slate-border flex justify-between items-center px-4 h-8 fixed bottom-0 left-0 w-full z-50">
+<span class="font-label-caps text-label-caps text-on-tertiary-fixed">LOCAL PROCESSING ONLY</span>
+<div class="flex gap-4">
+<span class="font-mono-data text-mono-data text-on-surface-variant hover:text-on-surface cursor-pointer">SYSTEM STATS</span>
+<span class="font-mono-data text-mono-data text-on-surface-variant hover:text-on-surface cursor-pointer">LATENCY: 2.4ms</span>
+</div>
+</footer>
+<style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0B0C0E; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #2D3239; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #3b494b; 
+        }
+    </style>
+</body></html>
