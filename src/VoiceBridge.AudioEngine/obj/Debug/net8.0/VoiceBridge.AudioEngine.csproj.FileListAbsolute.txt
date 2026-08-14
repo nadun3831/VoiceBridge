@@ -1,0 +1,16 @@
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.AudioEngine\bin\Debug\net8.0\VoiceBridge.AudioEngine.deps.json
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.AudioEngine\bin\Debug\net8.0\VoiceBridge.AudioEngine.dll
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.AudioEngine\bin\Debug\net8.0\VoiceBridge.AudioEngine.pdb
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.AudioEngine\bin\Debug\net8.0\VoiceBridge.Core.dll
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.AudioEngine\bin\Debug\net8.0\VoiceBridge.Core.pdb
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.AudioEngine\obj\Debug\net8.0\VoiceBridge.AudioEngine.csproj.AssemblyReference.cache
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.AudioEngine\obj\Debug\net8.0\VoiceBridge.AudioEngine.GeneratedMSBuildEditorConfig.editorconfig
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.AudioEngine\obj\Debug\net8.0\VoiceBridge.AudioEngine.AssemblyInfoInputs.cache
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.AudioEngine\obj\Debug\net8.0\VoiceBridge.AudioEngine.AssemblyInfo.cs
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.AudioEngine\obj\Debug\net8.0\VoiceBridge.AudioEngine.csproj.CoreCompileInputs.cache
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.AudioEngine\obj\Debug\net8.0\VoiceBridge.AudioEngine.sourcelink.json
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.AudioEngine\obj\Debug\net8.0\VoiceBri.70157C60.Up2Date
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.AudioEngine\obj\Debug\net8.0\VoiceBridge.AudioEngine.dll
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.AudioEngine\obj\Debug\net8.0\refint\VoiceBridge.AudioEngine.dll
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.AudioEngine\obj\Debug\net8.0\VoiceBridge.AudioEngine.pdb
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.AudioEngine\obj\Debug\net8.0\ref\VoiceBridge.AudioEngine.dll

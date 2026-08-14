@@ -1,0 +1,12 @@
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.Core\bin\Debug\net8.0\VoiceBridge.Core.deps.json
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.Core\bin\Debug\net8.0\VoiceBridge.Core.dll
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.Core\bin\Debug\net8.0\VoiceBridge.Core.pdb
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.Core\obj\Debug\net8.0\VoiceBridge.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.Core\obj\Debug\net8.0\VoiceBridge.Core.AssemblyInfoInputs.cache
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.Core\obj\Debug\net8.0\VoiceBridge.Core.AssemblyInfo.cs
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.Core\obj\Debug\net8.0\VoiceBridge.Core.csproj.CoreCompileInputs.cache
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.Core\obj\Debug\net8.0\VoiceBridge.Core.sourcelink.json
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.Core\obj\Debug\net8.0\VoiceBridge.Core.dll
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.Core\obj\Debug\net8.0\refint\VoiceBridge.Core.dll
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.Core\obj\Debug\net8.0\VoiceBridge.Core.pdb
+C:\BscIT\Projects\VoiceBridge\src\VoiceBridge.Core\obj\Debug\net8.0\ref\VoiceBridge.Core.dll

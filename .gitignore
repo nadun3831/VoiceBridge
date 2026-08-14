@@ -1,3 +1,13 @@
-node_modules/
-.env
-dist/
+## Visual Studio / .NET GitIgnore
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
+[Bb]in/
+[Ob]j/
+out/
+*.log
+*.user
+dotnet-sdk.zip
+dotnet-install.ps1
+*.nupkg

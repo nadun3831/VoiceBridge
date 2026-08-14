@@ -1,0 +1,295 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Application\\VoiceBridge.Application.csproj": {}
+  },
+  "projects": {
+    "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Application\\VoiceBridge.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Application\\VoiceBridge.Application.csproj",
+        "projectName": "VoiceBridge.Application",
+        "projectPath": "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Application\\VoiceBridge.Application.csproj",
+        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
+        "outputPath": "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Application\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.AudioEngine\\VoiceBridge.AudioEngine.csproj": {
+                "projectPath": "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.AudioEngine\\VoiceBridge.AudioEngine.csproj"
+              },
+              "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Core\\VoiceBridge.Core.csproj": {
+                "projectPath": "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Core\\VoiceBridge.Core.csproj"
+              },
+              "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Infrastructure\\VoiceBridge.Infrastructure.csproj": {
+                "projectPath": "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Infrastructure\\VoiceBridge.Infrastructure.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "CommunityToolkit.Mvvm": {
+              "target": "Package",
+              "version": "[8.2.2, )"
+            },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Users\\USER\\.dotnet\\sdk\\8.0.424/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.AudioEngine\\VoiceBridge.AudioEngine.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.AudioEngine\\VoiceBridge.AudioEngine.csproj",
+        "projectName": "VoiceBridge.AudioEngine",
+        "projectPath": "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.AudioEngine\\VoiceBridge.AudioEngine.csproj",
+        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
+        "outputPath": "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.AudioEngine\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Core\\VoiceBridge.Core.csproj": {
+                "projectPath": "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Core\\VoiceBridge.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "NAudio": {
+              "target": "Package",
+              "version": "[2.2.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Users\\USER\\.dotnet\\sdk\\8.0.424/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Core\\VoiceBridge.Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Core\\VoiceBridge.Core.csproj",
+        "projectName": "VoiceBridge.Core",
+        "projectPath": "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Core\\VoiceBridge.Core.csproj",
+        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
+        "outputPath": "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Core\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Users\\USER\\.dotnet\\sdk\\8.0.424/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Infrastructure\\VoiceBridge.Infrastructure.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Infrastructure\\VoiceBridge.Infrastructure.csproj",
+        "projectName": "VoiceBridge.Infrastructure",
+        "projectPath": "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Infrastructure\\VoiceBridge.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\USER\\.nuget\\packages\\",
+        "outputPath": "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Infrastructure\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\USER\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.AudioEngine\\VoiceBridge.AudioEngine.csproj": {
+                "projectPath": "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.AudioEngine\\VoiceBridge.AudioEngine.csproj"
+              },
+              "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Core\\VoiceBridge.Core.csproj": {
+                "projectPath": "C:\\BscIT\\Projects\\VoiceBridge\\src\\VoiceBridge.Core\\VoiceBridge.Core.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Serilog": {
+              "target": "Package",
+              "version": "[3.1.1, )"
+            },
+            "Serilog.Sinks.Console": {
+              "target": "Package",
+              "version": "[5.0.1, )"
+            },
+            "Serilog.Sinks.File": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Users\\USER\\.dotnet\\sdk\\8.0.424/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
