@@ -5,16 +5,13 @@ echo   VoiceBridge Desktop Real-Time Audio Engine
 echo ===================================================
 echo Starting application...
 
+set EXE_PATH=%~dp0src\VoiceBridge.UI\bin\Debug\net8.0-windows\VoiceBridge.UI.exe
 set DOTNET_PATH=%USERPROFILE%\.dotnet\dotnet.exe
 
-if exist "%DOTNET_PATH%" (
+if exist "%EXE_PATH%" (
+    start "" "%EXE_PATH%"
+) else if exist "%DOTNET_PATH%" (
     "%DOTNET_PATH%" run --project "%~dp0src\VoiceBridge.UI\VoiceBridge.UI.csproj"
 ) else (
     dotnet run --project "%~dp0src\VoiceBridge.UI\VoiceBridge.UI.csproj"
-)
-
-if %ERRORLEVEL% NEQ 0 (
-    echo.
-    echo Error starting VoiceBridge. Press any key to exit...
-    pause > nul
 )

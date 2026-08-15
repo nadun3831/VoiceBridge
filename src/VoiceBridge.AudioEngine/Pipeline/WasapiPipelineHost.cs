@@ -7,39 +7,37 @@ namespace VoiceBridge.AudioEngine.Pipeline;
 
 /// <summary>
 /// Real-time WASAPI audio capture → effect chain processing → WASAPI render pipeline host.
-/// Supports 16-bit PCM, 24-bit PCM, and 32-bit Float formats across hardware microphones.
+/// Fully handles sample rate, channel count (Mono/Stereo), and bit depth adaptation between capture and render hardware.
 /// </summary>
 public sealed class WasapiPipelineHost : IAudioPipelineHost, IDisposable
 {
-    // ── Events ──────────────────────────────────────────────────────────────
     public event EventHandler<EngineState>? StateChanged;
     public event EventHandler<AudioMeterEventArgs>? MeterUpdated;
 
-    // ── State ────────────────────────────────────────────────────────────────
     private EngineState _currentState = EngineState.Stopped;
     public EngineState CurrentState => _currentState;
 
-    // ── Effect Chain ─────────────────────────────────────────────────────────
     private volatile List<IAudioEffect> _effects = new();
     private readonly object _effectsLock = new();
 
-    // ── Audio Components ──────────────────────────────────────────────────────
     private WasapiCapture? _capture;
     private WasapiOut? _render;
     private BufferedWaveProvider? _playbackBuffer;
 
-    // ── Hot-path reusable buffers ─────────────────────────────────────────────
-    private float[] _processingBuffer = Array.Empty<float>();
+    private float[] _inputProcessingBuffer = Array.Empty<float>();
+    private float[] _outputProcessingBuffer = Array.Empty<float>();
     private byte[] _outputByteBuffer = Array.Empty<byte>();
 
-    // ── Metering ──────────────────────────────────────────────────────────────
     private float _peakInputDb = -120f;
     private float _peakOutputDb = -120f;
     private readonly System.Timers.Timer _meterTimer;
     private const float MeterDecayRate = 0.85f;
-
-    // ── Configuration ─────────────────────────────────────────────────────────
     private const int BufferMs = 10;
+
+    private int _inChannels = 2;
+    private int _outChannels = 2;
+    private int _inSampleRate = 48000;
+    private int _outSampleRate = 48000;
 
     public WasapiPipelineHost()
     {
@@ -76,11 +74,57 @@ public sealed class WasapiPipelineHost : IAudioPipelineHost, IDisposable
         {
             try
             {
-                InitializeCapture(inputDeviceId);
-                InitializeRender(outputDeviceId);
+                var enumerator = new MMDeviceEnumerator();
+                
+                // 1. Get Capture Device
+                MMDevice captureDevice;
+                if (string.IsNullOrWhiteSpace(inputDeviceId))
+                    captureDevice = enumerator.GetDefaultAudioEndpoint(DataFlow.Capture, Role.Multimedia);
+                else
+                    captureDevice = enumerator.GetDevice(inputDeviceId);
 
-                _capture!.StartRecording();
-                _render!.Play();
+                // 2. Get Render Device
+                MMDevice renderDevice;
+                if (string.IsNullOrWhiteSpace(outputDeviceId))
+                    renderDevice = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
+                else
+                    renderDevice = enumerator.GetDevice(outputDeviceId);
+
+                // 3. Initialize WasapiCapture
+                _capture = new WasapiCapture(captureDevice)
+                {
+                    ShareMode = AudioClientShareMode.Shared
+                };
+
+                var inFormat = _capture.WaveFormat;
+                _inChannels = inFormat.Channels;
+                _inSampleRate = inFormat.SampleRate;
+
+                // 4. Initialize WasapiOut using Render Device MixFormat
+                WaveFormat outFormat = renderDevice.AudioClient.MixFormat;
+                _outChannels = outFormat.Channels;
+                _outSampleRate = outFormat.SampleRate;
+
+                int bufferSize = (int)(_inSampleRate * _inChannels * (BufferMs / 1000.0) * 4);
+                if (bufferSize < 4096) bufferSize = 4096;
+
+                _inputProcessingBuffer = new float[bufferSize];
+                _outputProcessingBuffer = new float[bufferSize * 4];
+
+                _playbackBuffer = new BufferedWaveProvider(outFormat)
+                {
+                    BufferLength = bufferSize * 32,
+                    DiscardOnBufferOverflow = true
+                };
+
+                _render = new WasapiOut(renderDevice, AudioClientShareMode.Shared, true, BufferMs);
+                _render.Init(_playbackBuffer);
+
+                _capture.DataAvailable += OnCaptureDataAvailable;
+                _capture.RecordingStopped += OnRecordingStopped;
+
+                _capture.StartRecording();
+                _render.Play();
                 _meterTimer.Start();
 
                 SetState(EngineState.Running);
@@ -88,7 +132,7 @@ public sealed class WasapiPipelineHost : IAudioPipelineHost, IDisposable
             catch (Exception ex)
             {
                 SetState(EngineState.Error);
-                throw new InvalidOperationException($"Failed to start audio pipeline: {ex.Message}", ex);
+                throw new InvalidOperationException($"Audio Engine Start Error: {ex.Message}", ex);
             }
         });
     }
@@ -121,139 +165,145 @@ public sealed class WasapiPipelineHost : IAudioPipelineHost, IDisposable
         });
     }
 
-    private void InitializeCapture(string inputDeviceId)
-    {
-        var enumerator = new MMDeviceEnumerator();
-        MMDevice device;
-
-        if (string.IsNullOrWhiteSpace(inputDeviceId))
-        {
-            device = enumerator.GetDefaultAudioEndpoint(DataFlow.Capture, Role.Multimedia);
-        }
-        else
-        {
-            device = enumerator.GetDevice(inputDeviceId);
-        }
-
-        _capture = new WasapiCapture(device)
-        {
-            ShareMode = AudioClientShareMode.Shared
-        };
-
-        var format = _capture.WaveFormat;
-        int bufferSize = (int)(format.SampleRate * format.Channels * (BufferMs / 1000.0) * 4);
-        _processingBuffer = new float[bufferSize];
-
-        _playbackBuffer = new BufferedWaveProvider(format)
-        {
-            BufferLength = bufferSize * 16,
-            DiscardOnBufferOverflow = true
-        };
-
-        _capture.DataAvailable += OnCaptureDataAvailable;
-        _capture.RecordingStopped += OnRecordingStopped;
-    }
-
-    private void InitializeRender(string outputDeviceId)
-    {
-        var enumerator = new MMDeviceEnumerator();
-        MMDevice device;
-
-        if (string.IsNullOrWhiteSpace(outputDeviceId))
-        {
-            device = enumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia);
-        }
-        else
-        {
-            device = enumerator.GetDevice(outputDeviceId);
-        }
-
-        _render = new WasapiOut(device, AudioClientShareMode.Shared, true, BufferMs);
-        _render.Init(_playbackBuffer!);
-    }
-
     private void OnCaptureDataAvailable(object? sender, WaveInEventArgs e)
     {
         if (e.BytesRecorded == 0 || _capture == null) return;
 
-        int bitsPerSample = _capture.WaveFormat.BitsPerSample;
-        int sampleCount = 0;
+        var waveFormat = _capture.WaveFormat;
+        int bitsPerSample = waveFormat.BitsPerSample;
+        int frameCount = 0;
 
-        // 1. Decode byte buffer to floating point samples (-1.0 to +1.0)
-        if (bitsPerSample == 16)
+        var waveBuffer = new WaveBuffer(e.Buffer);
+
+        // 1. Decode capture bytes to floating point samples
+        if (waveFormat.Encoding == WaveFormatEncoding.IeeeFloat || bitsPerSample == 32 && isFloatEncoding(waveFormat))
         {
-            sampleCount = e.BytesRecorded / 2;
-            if (_processingBuffer.Length < sampleCount)
-                _processingBuffer = new float[sampleCount];
+            int totalFloats = e.BytesRecorded / 4;
+            frameCount = totalFloats / _inChannels;
+            if (_inputProcessingBuffer.Length < totalFloats)
+                _inputProcessingBuffer = new float[totalFloats];
 
-            for (int i = 0; i < sampleCount; i++)
+            for (int i = 0; i < totalFloats; i++)
             {
-                short sample = BitConverter.ToInt16(e.Buffer, i * 2);
-                _processingBuffer[i] = sample / 32768.0f;
+                _inputProcessingBuffer[i] = waveBuffer.FloatBuffer[i];
+            }
+        }
+        else if (bitsPerSample == 16)
+        {
+            int totalShorts = e.BytesRecorded / 2;
+            frameCount = totalShorts / _inChannels;
+            if (_inputProcessingBuffer.Length < totalShorts)
+                _inputProcessingBuffer = new float[totalShorts];
+
+            for (int i = 0; i < totalShorts; i++)
+            {
+                _inputProcessingBuffer[i] = waveBuffer.ShortBuffer[i] / 32768.0f;
             }
         }
         else if (bitsPerSample == 24)
         {
-            sampleCount = e.BytesRecorded / 3;
-            if (_processingBuffer.Length < sampleCount)
-                _processingBuffer = new float[sampleCount];
+            int totalSamples = e.BytesRecorded / 3;
+            frameCount = totalSamples / _inChannels;
+            if (_inputProcessingBuffer.Length < totalSamples)
+                _inputProcessingBuffer = new float[totalSamples];
 
-            for (int i = 0; i < sampleCount; i++)
+            for (int i = 0; i < totalSamples; i++)
             {
                 int sample = (e.Buffer[i * 3 + 2] << 16) | (e.Buffer[i * 3 + 1] << 8) | e.Buffer[i * 3];
                 if ((sample & 0x800000) != 0) sample |= unchecked((int)0xFF000000);
-                _processingBuffer[i] = sample / 8388608.0f;
+                _inputProcessingBuffer[i] = sample / 8388608.0f;
             }
         }
-        else // 32-bit Float
+        else if (bitsPerSample == 32)
         {
-            sampleCount = e.BytesRecorded / 4;
-            if (_processingBuffer.Length < sampleCount)
-                _processingBuffer = new float[sampleCount];
+            int totalInts = e.BytesRecorded / 4;
+            frameCount = totalInts / _inChannels;
+            if (_inputProcessingBuffer.Length < totalInts)
+                _inputProcessingBuffer = new float[totalInts];
 
-            for (int i = 0; i < sampleCount; i++)
+            for (int i = 0; i < totalInts; i++)
             {
-                _processingBuffer[i] = BitConverter.ToSingle(e.Buffer, i * 4);
+                _inputProcessingBuffer[i] = waveBuffer.IntBuffer[i] / 2147483648.0f;
             }
         }
+
+        if (frameCount == 0) return;
+        int totalInSamples = frameCount * _inChannels;
 
         // 2. Compute INPUT Peak dB
-        float inputPeak = ComputePeakLinear(_processingBuffer, 0, sampleCount);
+        float inputPeak = ComputePeakLinear(_inputProcessingBuffer, 0, totalInSamples);
         Volatile.Write(ref _peakInputDb, LinearToDb(inputPeak));
 
         // 3. Process DSP Effect Chain
         var effectSnapshot = _effects;
         foreach (var effect in effectSnapshot)
         {
-            effect.ProcessBuffer(_processingBuffer, 0, sampleCount);
+            effect.ProcessBuffer(_inputProcessingBuffer, 0, totalInSamples);
         }
 
         // 4. Compute OUTPUT Peak dB
-        float outputPeak = ComputePeakLinear(_processingBuffer, 0, sampleCount);
+        float outputPeak = ComputePeakLinear(_inputProcessingBuffer, 0, totalInSamples);
         Volatile.Write(ref _peakOutputDb, LinearToDb(outputPeak));
 
-        // 5. Encode floating point samples back to matching output byte format
-        int outputByteCount = e.BytesRecorded;
-        if (_outputByteBuffer.Length < outputByteCount)
-            _outputByteBuffer = new byte[outputByteCount];
+        // 5. Adapt Channel Layout (Mono -> Stereo or Stereo -> Mono)
+        int totalOutSamples = frameCount * _outChannels;
+        if (_outputProcessingBuffer.Length < totalOutSamples)
+            _outputProcessingBuffer = new float[totalOutSamples];
 
-        if (bitsPerSample == 16)
+        if (_inChannels == 1 && _outChannels == 2)
         {
-            for (int i = 0; i < sampleCount; i++)
+            // Mono input -> Stereo output
+            for (int f = 0; f < frameCount; f++)
             {
-                float clamped = Math.Clamp(_processingBuffer[i], -1.0f, 1.0f);
+                float monoSample = _inputProcessingBuffer[f];
+                _outputProcessingBuffer[f * 2] = monoSample;
+                _outputProcessingBuffer[f * 2 + 1] = monoSample;
+            }
+        }
+        else
+        {
+            Array.Copy(_inputProcessingBuffer, 0, _outputProcessingBuffer, 0, Math.Min(totalInSamples, totalOutSamples));
+        }
+
+        // 6. Encode float samples to match render device output buffer (32-bit Float or 16-bit PCM)
+        int renderBits = _playbackBuffer?.WaveFormat.BitsPerSample ?? 32;
+        int outputByteCount;
+
+        if (renderBits == 16)
+        {
+            outputByteCount = totalOutSamples * 2;
+            if (_outputByteBuffer.Length < outputByteCount)
+                _outputByteBuffer = new byte[outputByteCount];
+
+            for (int i = 0; i < totalOutSamples; i++)
+            {
+                float clamped = Math.Clamp(_outputProcessingBuffer[i], -1.0f, 1.0f);
                 short s = (short)(clamped * 32767.0f);
                 byte[] bytes = BitConverter.GetBytes(s);
                 _outputByteBuffer[i * 2] = bytes[0];
                 _outputByteBuffer[i * 2 + 1] = bytes[1];
             }
         }
-        else if (bitsPerSample == 32)
+        else // 32-bit Float
         {
-            Buffer.BlockCopy(_processingBuffer, 0, _outputByteBuffer, 0, outputByteCount);
+            outputByteCount = totalOutSamples * 4;
+            if (_outputByteBuffer.Length < outputByteCount)
+                _outputByteBuffer = new byte[outputByteCount];
+
+            Buffer.BlockCopy(_outputProcessingBuffer, 0, _outputByteBuffer, 0, outputByteCount);
         }
 
         _playbackBuffer?.AddSamples(_outputByteBuffer, 0, outputByteCount);
+    }
+
+    private static bool isFloatEncoding(WaveFormat format)
+    {
+        if (format.Encoding == WaveFormatEncoding.IeeeFloat) return true;
+        if (format is WaveFormatExtensible ext)
+        {
+            return ext.SubFormat == new Guid("00000003-0000-0010-8000-00aa00389b71");
+        }
+        return false;
     }
 
     private void OnRecordingStopped(object? sender, StoppedEventArgs e)
