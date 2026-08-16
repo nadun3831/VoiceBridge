@@ -34,6 +34,15 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private bool _isBypassed = false;
 
+    [ObservableProperty]
+    private bool _isFeedbackEnabled = true;
+
+    partial void OnIsFeedbackEnabledChanged(bool value)
+    {
+        _pipelineHost.IsFeedbackEnabled = value;
+        StatusText = value ? "Audio Monitoring (Hear Yourself): ON" : "Audio Monitoring (Hear Yourself): OFF";
+    }
+
     // Concrete effect instances attached to pipeline
     private readonly GainEffect _gainEffect = new();
     private readonly NoiseGateEffect _noiseGateEffect = new();

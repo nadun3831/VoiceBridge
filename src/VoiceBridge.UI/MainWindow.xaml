@@ -71,6 +71,14 @@
                         <TextBlock Text="Playback / Virtual Output" Foreground="{StaticResource TextMutedBrush}" FontSize="12" Margin="0,0,0,6"/>
                         <ComboBox ItemsSource="{Binding Devices.OutputDevices}" DisplayMemberPath="Name" SelectedItem="{Binding Devices.SelectedOutputDevice}" Margin="0,0,0,14" Height="34"/>
 
+                        <!-- Audio Monitoring (Hear Myself) Toggle -->
+                        <CheckBox Content="🎧 Hear Myself (Audio Monitoring)" 
+                                  IsChecked="{Binding IsFeedbackEnabled, Mode=TwoWay}" 
+                                  Foreground="{StaticResource TextPrimaryBrush}" 
+                                  FontSize="13" FontWeight="SemiBold" 
+                                  Cursor="Hand"
+                                  Margin="0,0,0,14"/>
+
                         <!-- Virtual Driver Status -->
                         <Border Background="#121820" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12,10">
                             <Grid>

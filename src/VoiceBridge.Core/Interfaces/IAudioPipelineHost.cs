@@ -23,6 +23,11 @@ public interface IAudioPipelineHost
     EngineState CurrentState { get; }
 
     /// <summary>
+    /// Gets or sets whether live audio feedback (monitoring back to output speakers) is enabled.
+    /// </summary>
+    bool IsFeedbackEnabled { get; set; }
+
+    /// <summary>
     /// Starts capturing audio from the designated input device and routing through effects to output.
     /// </summary>
     Task StartAsync(string inputDeviceId, string outputDeviceId);

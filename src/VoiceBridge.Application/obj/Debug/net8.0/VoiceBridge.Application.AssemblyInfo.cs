@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("VoiceBridge.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+40147131c9b955806bfac9321964495aa54e7a1b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d7b665875d03c3dea938d5fa7cff816bf17e3dd3")]
 [assembly: System.Reflection.AssemblyProductAttribute("VoiceBridge.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("VoiceBridge.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

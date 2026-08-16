@@ -119,7 +119,7 @@ public class DspEffectTests
     [Fact]
     public void PitchShiftEffect_ZeroSemitones_IsPassthrough()
     {
-        var effect = new PitchShiftEffect(sampleRate: 48000) { Semitones = 0f, IsEnabled = true };
+        var effect = new PitchShiftEffect() { Semitones = 0f, IsEnabled = true };
         float[] buffer = [0.5f, -0.5f, 0.3f, -0.3f];
         float[] original = [.. buffer];
 
@@ -132,7 +132,7 @@ public class DspEffectTests
     [Fact]
     public void PitchShiftEffect_Reset_ClearsInternalState()
     {
-        var effect = new PitchShiftEffect(sampleRate: 48000) { Semitones = 3f, IsEnabled = true };
+        var effect = new PitchShiftEffect() { Semitones = 3f, IsEnabled = true };
         float[] buf = Enumerable.Repeat(0.5f, 2048).ToArray();
         effect.ProcessBuffer(buf, 0, buf.Length);
 

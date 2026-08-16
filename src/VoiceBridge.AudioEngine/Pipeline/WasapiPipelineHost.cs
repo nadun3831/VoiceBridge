@@ -17,6 +17,13 @@ public sealed class WasapiPipelineHost : IAudioPipelineHost, IDisposable
     private EngineState _currentState = EngineState.Stopped;
     public EngineState CurrentState => _currentState;
 
+    private volatile bool _isFeedbackEnabled = true;
+    public bool IsFeedbackEnabled
+    {
+        get => _isFeedbackEnabled;
+        set => _isFeedbackEnabled = value;
+    }
+
     private volatile List<IAudioEffect> _effects = new();
     private readonly object _effectsLock = new();
 
@@ -293,7 +300,15 @@ public sealed class WasapiPipelineHost : IAudioPipelineHost, IDisposable
             Buffer.BlockCopy(_outputProcessingBuffer, 0, _outputByteBuffer, 0, outputByteCount);
         }
 
-        _playbackBuffer?.AddSamples(_outputByteBuffer, 0, outputByteCount);
+        if (_isFeedbackEnabled)
+        {
+            _playbackBuffer?.AddSamples(_outputByteBuffer, 0, outputByteCount);
+        }
+        else
+        {
+            Array.Clear(_outputByteBuffer, 0, outputByteCount);
+            _playbackBuffer?.AddSamples(_outputByteBuffer, 0, outputByteCount);
+        }
     }
 
     private static bool isFloatEncoding(WaveFormat format)

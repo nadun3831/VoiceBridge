@@ -100,6 +100,8 @@ public class JsonPresetRepository : IPresetRepository
     private void InitializeDefaultPresets()
     {
         _presets.Clear();
+
+        // 1. Natural Clean
         _presets.Add(new Preset(
             Id: "clean",
             Name: "Clean / Pass-through",
@@ -113,9 +115,55 @@ public class JsonPresetRepository : IPresetRepository
             }
         ));
 
+        // 2. Realistic Female Voice (Girl)
+        _presets.Add(new Preset(
+            Id: "realistic_female",
+            Name: "Realistic Girl Voice 👩✨",
+            Description: "Natural realistic female voice profile tuned with pitch shift (+3.5 st) and acoustic gain.",
+            Category: "Voice Transformation",
+            IsCustom: false,
+            Effects: new List<EffectConfig>
+            {
+                new("pitch_shift", "Pitch Shift", true, new Dictionary<string, float> { { "Semitones", 3.5f } }),
+                new("gain", "Gain", true, new Dictionary<string, float> { { "GainFactor", 1.25f } }),
+                new("noise_gate", "Noise Gate", true, new Dictionary<string, float> { { "ThresholdDb", -45.0f }, { "AttackMs", 5.0f }, { "ReleaseMs", 50.0f } })
+            }
+        ));
+
+        // 3. Anime Girl / Cute Character
+        _presets.Add(new Preset(
+            Id: "anime_girl",
+            Name: "Anime Girl / Cute Voice 🎀",
+            Description: "High-pitched vibrant anime character voice (+5.5 semitones).",
+            Category: "Creative",
+            IsCustom: false,
+            Effects: new List<EffectConfig>
+            {
+                new("pitch_shift", "Pitch Shift", true, new Dictionary<string, float> { { "Semitones", 5.5f } }),
+                new("gain", "Gain", true, new Dictionary<string, float> { { "GainFactor", 1.3f } }),
+                new("noise_gate", "Noise Gate", true, new Dictionary<string, float> { { "ThresholdDb", -45.0f }, { "AttackMs", 5.0f }, { "ReleaseMs", 50.0f } })
+            }
+        ));
+
+        // 4. Female Streamer / Warm Clarifier
+        _presets.Add(new Preset(
+            Id: "female_streamer",
+            Name: "Female Streamer 🎙️",
+            Description: "Smooth female broadcaster voice with warmth and room ambience.",
+            Category: "Voice Transformation",
+            IsCustom: false,
+            Effects: new List<EffectConfig>
+            {
+                new("pitch_shift", "Pitch Shift", true, new Dictionary<string, float> { { "Semitones", 2.8f } }),
+                new("gain", "Gain", true, new Dictionary<string, float> { { "GainFactor", 1.2f } }),
+                new("reverb", "Reverb", true, new Dictionary<string, float> { { "RoomSize", 0.25f }, { "WetMix", 0.12f }, { "Damping", 0.5f } })
+            }
+        ));
+
+        // 5. Radio Announcer
         _presets.Add(new Preset(
             Id: "radio_broadcaster",
-            Name: "Radio Announcer",
+            Name: "Radio Announcer 📻",
             Description: "Warm broadcast radio tone with low-end boost and noise control.",
             Category: "Voice",
             IsCustom: false,
@@ -127,9 +175,24 @@ public class JsonPresetRepository : IPresetRepository
             }
         ));
 
+        // 6. Deep Male Voice
+        _presets.Add(new Preset(
+            Id: "deep_voice",
+            Name: "Deep Male Voice 🧔",
+            Description: "Pitch-shifted deep voice effect for voice mask.",
+            Category: "Voice Transformation",
+            IsCustom: false,
+            Effects: new List<EffectConfig>
+            {
+                new("pitch_shift", "Pitch Shift", true, new Dictionary<string, float> { { "Semitones", -4.0f } }),
+                new("gain", "Gain", true, new Dictionary<string, float> { { "GainFactor", 1.1f } })
+            }
+        ));
+
+        // 7. Ethereal Echo
         _presets.Add(new Preset(
             Id: "ethereal_echo",
-            Name: "Ethereal Echo",
+            Name: "Ethereal Echo 🌌",
             Description: "Atmospheric vocal reverb with soft delay reflections.",
             Category: "Creative",
             IsCustom: false,
@@ -137,19 +200,6 @@ public class JsonPresetRepository : IPresetRepository
             {
                 new("delay", "Delay", true, new Dictionary<string, float> { { "DelayMs", 250.0f }, { "Feedback", 0.4f }, { "WetMix", 0.35f } }),
                 new("reverb", "Reverb", true, new Dictionary<string, float> { { "RoomSize", 0.7f }, { "WetMix", 0.4f }, { "Damping", 0.4f } })
-            }
-        ));
-
-        _presets.Add(new Preset(
-            Id: "deep_voice",
-            Name: "Deep Male Voice",
-            Description: "Pitch-shifted deep voice effect for voice mask.",
-            Category: "Voice",
-            IsCustom: false,
-            Effects: new List<EffectConfig>
-            {
-                new("pitch_shift", "Pitch Shift", true, new Dictionary<string, float> { { "Semitones", -4.0f } }),
-                new("gain", "Gain", true, new Dictionary<string, float> { { "GainFactor", 1.1f } })
             }
         ));
     }
