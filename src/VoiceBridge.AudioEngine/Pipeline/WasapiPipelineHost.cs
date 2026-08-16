@@ -39,7 +39,7 @@ public sealed class WasapiPipelineHost : IAudioPipelineHost, IDisposable
     private float _peakOutputDb = -120f;
     private readonly System.Timers.Timer _meterTimer;
     private const float MeterDecayRate = 0.85f;
-    private const int BufferMs = 10;
+    private const int BufferMs = 50;
 
     private int _inChannels = 2;
     private int _outChannels = 2;
@@ -237,6 +237,14 @@ public sealed class WasapiPipelineHost : IAudioPipelineHost, IDisposable
         if (frameCount == 0) return;
         int totalInSamples = frameCount * _inChannels;
 
+        // 1.5 Sanitize input samples against NaN/Infinity
+        for (int i = 0; i < totalInSamples; i++)
+        {
+            float s = _inputProcessingBuffer[i];
+            if (float.IsNaN(s) || float.IsInfinity(s))
+                _inputProcessingBuffer[i] = 0f;
+        }
+
         // 2. Compute INPUT Peak dB
         float inputPeak = ComputePeakLinear(_inputProcessingBuffer, 0, totalInSamples);
         Volatile.Write(ref _peakInputDb, LinearToDb(inputPeak));
@@ -246,6 +254,14 @@ public sealed class WasapiPipelineHost : IAudioPipelineHost, IDisposable
         foreach (var effect in effectSnapshot)
         {
             effect.ProcessBuffer(_inputProcessingBuffer, 0, totalInSamples);
+        }
+
+        // 3.5 Sanitize output of effect chain against NaN/Infinity
+        for (int i = 0; i < totalInSamples; i++)
+        {
+            float s = _inputProcessingBuffer[i];
+            if (float.IsNaN(s) || float.IsInfinity(s))
+                _inputProcessingBuffer[i] = 0f;
         }
 
         // 4. Compute OUTPUT Peak dB
@@ -346,7 +362,9 @@ public sealed class WasapiPipelineHost : IAudioPipelineHost, IDisposable
         int end = offset + count;
         for (int i = offset; i < end; i++)
         {
-            float abs = Math.Abs(buffer[i]);
+            float s = buffer[i];
+            if (float.IsNaN(s) || float.IsInfinity(s)) continue;
+            float abs = Math.Abs(s);
             if (abs > peak) peak = abs;
         }
         return peak;
@@ -354,7 +372,9 @@ public sealed class WasapiPipelineHost : IAudioPipelineHost, IDisposable
 
     private static float LinearToDb(float linear)
     {
-        return linear > 1e-6f ? 20f * MathF.Log10(linear) : -120f;
+        if (float.IsNaN(linear) || float.IsInfinity(linear) || linear <= 1e-6f)
+            return -120f;
+        return 20f * MathF.Log10(linear);
     }
 
     private void SetState(EngineState state)

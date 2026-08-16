@@ -68,9 +68,17 @@ public sealed class PitchShiftEffect : AudioEffectBase
         set => Volatile.Write(ref _semitones, Math.Clamp(value, -12f, 12f));
     }
 
+    private volatile bool _resetRequested = false;
+
     // ── Core DSP ─────────────────────────────────────────────────────────────
     protected override void ProcessBufferCore(float[] buffer, int offset, int count)
     {
+        if (_resetRequested)
+        {
+            ResetInternalState();
+            _resetRequested = false;
+        }
+
         float semitones = Volatile.Read(ref _semitones);
         if (Math.Abs(semitones) < 0.03f) return;   // passthrough
 
@@ -79,32 +87,23 @@ public sealed class PitchShiftEffect : AudioEffectBase
         // 1. Write incoming samples into input ring
         for (int i = 0; i < count; i++)
         {
-            _inRing[_inWritePos] = buffer[offset + i];
+            float val = buffer[offset + i];
+            if (float.IsNaN(val) || float.IsInfinity(val)) val = 0f;
+            _inRing[_inWritePos] = val;
             _inWritePos          = (_inWritePos + 1) % _inRing.Length;
             _inTotalWritten++;
         }
 
         // 2. WSOLA synthesis loop – produce output samples proportional to input
-        //    We need `count` output samples (1-to-1 replacement in buffer).
-        //    The synthesis hops through the INPUT at `HopSize / pitchRatio` per hop,
-        //    and writes HopSize samples to the OUTPUT each hop.
         double inputHop = HopSize / pitchRatio;   // how far to advance in input per output hop
 
-        // Ensure we have enough input to start (need at least FrameSize)
-        long inputAvail = _inTotalWritten;
-        if (inputAvail < FrameSize) return;
-
-        // Synthesise until output ring has `count` new samples
-        long outTarget = _outTotalWritten + count;
-
-        while (_outTotalWritten < outTarget)
+        // Synthesise as long as we have enough input (limit max 16 iterations per buffer to prevent hanging)
+        int iterations = 0;
+        while ((_synthPhase + FrameSize / 2 + SearchWin) <= _inTotalWritten && iterations < 16)
         {
-            // --- Extract analysis frame from input ring at _synthPhase ---
+            iterations++;
             long analysisCenter = (long)_synthPhase;
             long analysisStart  = analysisCenter - FrameSize / 2;
-
-            // Guard: cannot read beyond what has been written
-            if (analysisStart + FrameSize > _inTotalWritten) break;
 
             ReadFromInRing(analysisStart, _frame, FrameSize);
 
@@ -142,11 +141,20 @@ public sealed class PitchShiftEffect : AudioEffectBase
         // 3. Read `count` samples from output ring into buffer
         for (int i = 0; i < count; i++)
         {
-            long readIdx  = (long)_readPhase;
-            long ringIdx  = readIdx % _outRing.Length;
-            if (ringIdx < 0) ringIdx += _outRing.Length;
-            buffer[offset + i] = _outRing[ringIdx];
-            _readPhase++;
+            if (_readPhase < _outTotalWritten)
+            {
+                long ringIdx = (long)_readPhase % _outRing.Length;
+                if (ringIdx < 0) ringIdx += _outRing.Length;
+                float val = _outRing[ringIdx];
+                if (float.IsNaN(val) || float.IsInfinity(val)) val = 0f;
+                buffer[offset + i] = val;
+                _outRing[ringIdx] = 0f; // CRITICAL: Clear sample for next overlap-add cycle
+                _readPhase++;
+            }
+            else
+            {
+                buffer[offset + i] = 0f; // Silence if output buffer starved (algorithmic latency)
+            }
         }
     }
 
@@ -158,24 +166,25 @@ public sealed class PitchShiftEffect : AudioEffectBase
     /// </summary>
     private int FindBestOverlap(float[] prevFrame, float[] candidateFrame)
     {
-        // Compare only the first HopSize samples (the overlap zone)
-        int cmpLen = Math.Min(HopSize, FrameSize);
+        // The overlap region length is FrameSize - HopSize (e.g. 1920 - 480 = 1440)
+        int cmpLen = FrameSize - HopSize;
 
         double bestCorr   = double.MinValue;
         int    bestOffset = 0;
 
-        for (int delta = -SearchWin; delta <= SearchWin; delta += 8)   // step=8 for speed
+        for (int delta = -SearchWin; delta <= SearchWin; delta += 4)   // step=4 for speed/accuracy balance
         {
             double corr = 0.0;
             double norm = 1e-9;
 
-            for (int k = 0; k < cmpLen; k++)
+            for (int k = 0; k < cmpLen; k += 2) // skip every other sample for performance
             {
-                int idx = k + delta + FrameSize / 2;
-                if (idx < 0 || idx >= FrameSize) continue;
+                int idxCandidate = k + delta;
+                if (idxCandidate < 0 || idxCandidate >= FrameSize) continue;
 
-                float a = prevFrame[FrameSize - cmpLen + k];   // tail of previous
-                float b = candidateFrame[idx];                  // head of candidate (shifted)
+                // Compare the overlap region of the previous frame with the candidate frame
+                float a = prevFrame[HopSize + k];
+                float b = candidateFrame[idxCandidate];
                 corr += a * b;
                 norm += b * b;
             }
@@ -214,13 +223,15 @@ public sealed class PitchShiftEffect : AudioEffectBase
     private static float[] BuildHann(int size)
     {
         var w = new float[size];
+        // For a 75% overlap (HopSize = FrameSize / 4), standard Hann windows sum to 2.0.
+        // We multiply by 0.5f to normalize the overlap sum to 1.0, preventing clipping/volume doubling!
+        float overlapScale = 0.5f; 
         for (int i = 0; i < size; i++)
-            w[i] = 0.5f * (1f - MathF.Cos(2f * MathF.PI * i / (size - 1)));
+            w[i] = overlapScale * 0.5f * (1f - MathF.Cos(2f * MathF.PI * i / (size - 1)));
         return w;
     }
 
-    // ── IAudioEffect ─────────────────────────────────────────────────────────
-    public override void Reset()
+    private void ResetInternalState()
     {
         Array.Clear(_inRing,    0, _inRing.Length);
         Array.Clear(_outRing,   0, _outRing.Length);
@@ -234,5 +245,11 @@ public sealed class PitchShiftEffect : AudioEffectBase
         _synthPhase      = FrameSize / 2.0;
         _readPhase       = 0;
         _hasPrevFrame    = false;
+    }
+
+    // ── IAudioEffect ─────────────────────────────────────────────────────────
+    public override void Reset()
+    {
+        _resetRequested = true;
     }
 }

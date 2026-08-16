@@ -46,6 +46,7 @@ public partial class MainViewModel : ObservableObject
     // Concrete effect instances attached to pipeline
     private readonly GainEffect _gainEffect = new();
     private readonly NoiseGateEffect _noiseGateEffect = new();
+    private readonly FormantFilterEffect _formantFilterEffect = new();
     private readonly PitchShiftEffect _pitchShiftEffect = new();
     private readonly DelayEffect _delayEffect = new();
     private readonly ReverbEffect _reverbEffect = new();
@@ -70,6 +71,7 @@ public partial class MainViewModel : ObservableObject
         // Register default effects with pipeline
         _pipelineHost.AddEffect(_gainEffect);
         _pipelineHost.AddEffect(_noiseGateEffect);
+        _pipelineHost.AddEffect(_formantFilterEffect);
         _pipelineHost.AddEffect(_pitchShiftEffect);
         _pipelineHost.AddEffect(_delayEffect);
         _pipelineHost.AddEffect(_reverbEffect);
@@ -117,6 +119,7 @@ public partial class MainViewModel : ObservableObject
         IsBypassed = !IsBypassed;
         _gainEffect.IsEnabled = !IsBypassed;
         _noiseGateEffect.IsEnabled = !IsBypassed;
+        _formantFilterEffect.IsEnabled = !IsBypassed;
         _pitchShiftEffect.IsEnabled = !IsBypassed;
         _delayEffect.IsEnabled = !IsBypassed;
         _reverbEffect.IsEnabled = !IsBypassed;
@@ -127,6 +130,18 @@ public partial class MainViewModel : ObservableObject
     private void OnPresetApplied(object? sender, Preset preset)
     {
         _logger.Information("Applying Preset: {PresetName}", preset.Name);
+
+        // Reset state on all effects to prevent filter state/buffer accumulation
+        _gainEffect.Reset();
+        _noiseGateEffect.Reset();
+        _formantFilterEffect.Reset();
+        _pitchShiftEffect.Reset();
+        _delayEffect.Reset();
+        _reverbEffect.Reset();
+
+        // Reset FormantFilter defaults unless explicitly specified in preset
+        _formantFilterEffect.IsEnabled = false;
+
         foreach (var effectCfg in preset.Effects)
         {
             switch (effectCfg.EffectId)
@@ -138,6 +153,12 @@ public partial class MainViewModel : ObservableObject
                 case "noise_gate":
                     if (effectCfg.Parameters.TryGetValue("ThresholdDb", out float th)) _noiseGateEffect.ThresholdDb = th;
                     _noiseGateEffect.IsEnabled = effectCfg.IsEnabled;
+                    break;
+                case "formant_filter":
+                    if (effectCfg.Parameters.TryGetValue("HighPassCutoff", out float hp)) _formantFilterEffect.HighPassCutoff = hp;
+                    if (effectCfg.Parameters.TryGetValue("FormantPresenceGainDb", out float fp)) _formantFilterEffect.FormantPresenceGainDb = fp;
+                    if (effectCfg.Parameters.TryGetValue("FormantWarmthGainDb", out float fw)) _formantFilterEffect.FormantWarmthGainDb = fw;
+                    _formantFilterEffect.IsEnabled = effectCfg.IsEnabled;
                     break;
                 case "pitch_shift":
                     if (effectCfg.Parameters.TryGetValue("Semitones", out float st)) _pitchShiftEffect.Semitones = st;
