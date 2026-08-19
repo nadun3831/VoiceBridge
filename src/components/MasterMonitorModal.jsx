@@ -14,30 +14,34 @@ export default function MasterMonitorModal({
   const isMaster = type === 'master';
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-slate-surface border border-electric-cyan p-6 rounded max-w-md w-full shadow-2xl space-y-4">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+      <div className="glass-panel border border-electric-cyan/60 p-6 rounded-2xl max-w-md w-full shadow-2xl space-y-5">
         <div className="flex justify-between items-center pb-3 border-b border-slate-border">
-          <h3 className="font-headline-md text-base font-bold text-electric-cyan flex items-center gap-2">
-            <span className="material-symbols-outlined">
-              {isMaster ? 'graphic_eq' : 'headphones'}
+          <h3 className="font-headline-md text-base font-extrabold text-electric-cyan flex items-center gap-2.5">
+            <span className="w-8 h-8 rounded-lg bg-electric-cyan/15 border border-electric-cyan/30 flex items-center justify-center text-electric-cyan">
+              <span className="material-symbols-outlined text-lg">
+                {isMaster ? 'graphic_eq' : 'headphones'}
+              </span>
             </span>
             {isMaster ? 'Master Output Volume' : 'Headphone Audio Monitoring'}
           </h3>
-          <button onClick={onClose} className="text-on-surface-variant hover:text-on-surface">
+          <button onClick={onClose} className="text-on-surface-variant hover:text-on-surface transition-colors">
             <span className="material-symbols-outlined">close</span>
           </button>
         </div>
 
         {isMaster ? (
           <div className="space-y-4">
-            <p className="font-mono-data text-xs text-on-surface-variant">
-              Adjust global output gain sent to Virtual Audio Driver endpoint.
+            <p className="font-mono-data text-xs text-on-surface-variant/80">
+              ADJUST GLOBAL OUTPUT GAIN SENT TO VIRTUAL AUDIO DRIVER ENDPOINT.
             </p>
 
-            <div className="space-y-2">
+            <div className="bg-deep-charcoal/90 border border-slate-border p-4 rounded-xl space-y-3 shadow-inner">
               <div className="flex justify-between font-mono-data text-xs">
-                <span>GAIN LEVEL</span>
-                <span className="text-electric-cyan font-bold">{Math.round(masterVolume * 100)}%</span>
+                <span className="font-bold text-on-surface-variant">MASTER GAIN LEVEL</span>
+                <span className="text-electric-cyan font-black bg-electric-cyan/10 border border-electric-cyan/30 px-2 py-0.5 rounded">
+                  {Math.round(masterVolume * 100)}%
+                </span>
               </div>
               <input
                 type="range"
@@ -52,16 +56,18 @@ export default function MasterMonitorModal({
           </div>
         ) : (
           <div className="space-y-4">
-            <p className="font-mono-data text-xs text-on-surface-variant">
-              Listen to processed voice live in headphones. (Wear headphones to prevent acoustic feedback loop!).
+            <p className="font-mono-data text-xs text-on-surface-variant/80">
+              LISTEN TO PROCESSED VOICE LIVE IN HEADPHONES. (WEAR HEADPHONES TO PREVENT ACOUSTIC FEEDBACK LOOP).
             </p>
 
-            <div className="bg-deep-charcoal border border-slate-border p-4 rounded flex justify-between items-center">
-              <div className="flex items-center gap-3">
-                <span className="material-symbols-outlined text-electric-cyan text-xl">headphones</span>
+            <div className="bg-deep-charcoal/90 border border-slate-border p-4 rounded-xl flex justify-between items-center shadow-inner">
+              <div className="flex items-center gap-3.5">
+                <div className="w-9 h-9 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                  <span className="material-symbols-outlined text-xl">headphones</span>
+                </div>
                 <div>
-                  <p className="font-mono-data text-xs font-bold text-on-surface">Monitor Headphones</p>
-                  <p className="font-label-caps text-[10px] text-on-surface-variant">System Output Playback</p>
+                  <p className="font-mono-data text-xs font-extrabold text-on-surface">Monitor Headphones</p>
+                  <p className="font-label-caps text-[10px] text-on-surface-variant/70">Direct Hardware Pass-Through</p>
                 </div>
               </div>
 
@@ -76,9 +82,9 @@ export default function MasterMonitorModal({
             </div>
 
             {isMonitoring && (
-              <div className="bg-signal-green/10 border border-signal-green/30 p-3 rounded text-signal-green font-mono-data text-xs flex items-center gap-2">
-                <span className="material-symbols-outlined text-sm">info</span>
-                Live headphone monitoring enabled.
+              <div className="bg-signal-green/10 border border-signal-green/30 p-3 rounded-lg text-signal-green font-mono-data text-xs flex items-center gap-2.5">
+                <span className="material-symbols-outlined text-sm text-signal-green">info</span>
+                Live headphone audio monitoring is active.
               </div>
             )}
           </div>
@@ -87,12 +93,13 @@ export default function MasterMonitorModal({
         <div className="pt-3 border-t border-slate-border flex justify-end">
           <button
             onClick={onClose}
-            className="bg-electric-cyan text-deep-charcoal font-label-caps text-xs font-bold px-5 py-2 hover:bg-primary rounded"
+            className="bg-electric-cyan text-deep-charcoal font-label-caps text-xs font-black px-6 py-2.5 hover:brightness-110 rounded-lg shadow-[0_0_12px_rgba(0,240,255,0.4)] transition-all"
           >
-            DONE
+            SAVE & CLOSE
           </button>
         </div>
       </div>
     </div>
   );
 }
+
