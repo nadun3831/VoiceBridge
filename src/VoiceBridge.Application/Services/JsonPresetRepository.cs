@@ -115,19 +115,19 @@ public class JsonPresetRepository : IPresetRepository
             }
         ));
 
-        // 2. Realistic Female Voice (Girl) - Formant Shaped & Low-End Attenuated
+        // 2. Realistic Female Voice (Girl) - Natural Formant Shaped
         _presets.Add(new Preset(
             Id: "realistic_female",
             Name: "Realistic Girl Voice 👩✨",
-            Description: "Ultra-realistic female voice profile with vocal tract formant shaping (+3.2 st pitch + male chest bass cut).",
+            Description: "Ultra-realistic female voice profile with acoustic vocal tract formant shaping (+2.8 st pitch + chest resonance cut).",
             Category: "Voice Transformation",
             IsCustom: false,
             Effects: new List<EffectConfig>
             {
-                new("noise_gate", "Noise Gate", true, new Dictionary<string, float> { { "ThresholdDb", -45.0f }, { "AttackMs", 5.0f }, { "ReleaseMs", 50.0f } }),
-                new("formant_filter", "Formant Filter", true, new Dictionary<string, float> { { "HighPassCutoff", 185.0f }, { "FormantPresenceGainDb", 3.5f }, { "FormantWarmthGainDb", 2.0f } }),
-                new("pitch_shift", "Pitch Shift", true, new Dictionary<string, float> { { "Semitones", 3.2f } }),
-                new("gain", "Gain", true, new Dictionary<string, float> { { "GainFactor", 1.15f } })
+                new("noise_gate", "Noise Gate", true, new Dictionary<string, float> { { "ThresholdDb", -48.0f }, { "AttackMs", 5.0f }, { "ReleaseMs", 50.0f } }),
+                new("formant_filter", "Formant Filter", true, new Dictionary<string, float> { { "HighPassCutoff", 165.0f }, { "FormantPresenceGainDb", 3.8f }, { "FormantWarmthGainDb", 2.2f } }),
+                new("pitch_shift", "Pitch Shift", true, new Dictionary<string, float> { { "Semitones", 2.8f } }),
+                new("gain", "Gain", true, new Dictionary<string, float> { { "GainFactor", 1.1f } })
             }
         ));
 
@@ -135,15 +135,15 @@ public class JsonPresetRepository : IPresetRepository
         _presets.Add(new Preset(
             Id: "anime_girl",
             Name: "Anime Girl / Cute Voice 🎀",
-            Description: "High-pitched vibrant anime character voice (+4.5 semitones + presence boost).",
+            Description: "High-pitched vibrant anime character voice (+3.8 semitones + presence boost).",
             Category: "Creative",
             IsCustom: false,
             Effects: new List<EffectConfig>
             {
-                new("noise_gate", "Noise Gate", true, new Dictionary<string, float> { { "ThresholdDb", -45.0f }, { "AttackMs", 5.0f }, { "ReleaseMs", 50.0f } }),
-                new("formant_filter", "Formant Filter", true, new Dictionary<string, float> { { "HighPassCutoff", 200.0f }, { "FormantPresenceGainDb", 5.0f }, { "FormantWarmthGainDb", 3.0f } }),
-                new("pitch_shift", "Pitch Shift", true, new Dictionary<string, float> { { "Semitones", 4.5f } }),
-                new("gain", "Gain", true, new Dictionary<string, float> { { "GainFactor", 1.2f } })
+                new("noise_gate", "Noise Gate", true, new Dictionary<string, float> { { "ThresholdDb", -48.0f }, { "AttackMs", 5.0f }, { "ReleaseMs", 50.0f } }),
+                new("formant_filter", "Formant Filter", true, new Dictionary<string, float> { { "HighPassCutoff", 195.0f }, { "FormantPresenceGainDb", 4.5f }, { "FormantWarmthGainDb", 2.8f } }),
+                new("pitch_shift", "Pitch Shift", true, new Dictionary<string, float> { { "Semitones", 3.8f } }),
+                new("gain", "Gain", true, new Dictionary<string, float> { { "GainFactor", 1.15f } })
             }
         ));
 
@@ -156,8 +156,8 @@ public class JsonPresetRepository : IPresetRepository
             IsCustom: false,
             Effects: new List<EffectConfig>
             {
-                new("formant_filter", "Formant Filter", true, new Dictionary<string, float> { { "HighPassCutoff", 170.0f }, { "FormantPresenceGainDb", 3.0f }, { "FormantWarmthGainDb", 1.5f } }),
-                new("pitch_shift", "Pitch Shift", true, new Dictionary<string, float> { { "Semitones", 2.7f } }),
+                new("formant_filter", "Formant Filter", true, new Dictionary<string, float> { { "HighPassCutoff", 155.0f }, { "FormantPresenceGainDb", 2.8f }, { "FormantWarmthGainDb", 1.8f } }),
+                new("pitch_shift", "Pitch Shift", true, new Dictionary<string, float> { { "Semitones", 2.4f } }),
                 new("gain", "Gain", true, new Dictionary<string, float> { { "GainFactor", 1.15f } }),
                 new("reverb", "Reverb", true, new Dictionary<string, float> { { "RoomSize", 0.25f }, { "WetMix", 0.10f }, { "Damping", 0.5f } })
             }

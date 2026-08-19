@@ -170,19 +170,19 @@ public sealed class PitchShiftEffect : AudioEffectBase
         int cmpLen = FrameSize - HopSize;
 
         double bestCorr   = double.MinValue;
-        int    bestOffset = 0;
+        int    coarseOffset = 0;
 
-        for (int delta = -SearchWin; delta <= SearchWin; delta += 4)   // step=4 for speed/accuracy balance
+        // Pass 1: Coarse search with step=4 for speed
+        for (int delta = -SearchWin; delta <= SearchWin; delta += 4)
         {
             double corr = 0.0;
             double norm = 1e-9;
 
-            for (int k = 0; k < cmpLen; k += 2) // skip every other sample for performance
+            for (int k = 0; k < cmpLen; k += 2)
             {
                 int idxCandidate = k + delta;
                 if (idxCandidate < 0 || idxCandidate >= FrameSize) continue;
 
-                // Compare the overlap region of the previous frame with the candidate frame
                 float a = prevFrame[HopSize + k];
                 float b = candidateFrame[idxCandidate];
                 corr += a * b;
@@ -192,11 +192,41 @@ public sealed class PitchShiftEffect : AudioEffectBase
             double normCorr = corr / Math.Sqrt(norm);
             if (normCorr > bestCorr)
             {
-                bestCorr   = normCorr;
-                bestOffset = delta;
+                bestCorr     = normCorr;
+                coarseOffset = delta;
             }
         }
-        return bestOffset;
+
+        // Pass 2: Fine-grained sample-exact search around coarse candidate (step=1)
+        int fineMin = Math.Max(-SearchWin, coarseOffset - 3);
+        int fineMax = Math.Min(SearchWin, coarseOffset + 3);
+        int finalOffset = coarseOffset;
+
+        for (int delta = fineMin; delta <= fineMax; delta++)
+        {
+            double corr = 0.0;
+            double norm = 1e-9;
+
+            for (int k = 0; k < cmpLen; k++)
+            {
+                int idxCandidate = k + delta;
+                if (idxCandidate < 0 || idxCandidate >= FrameSize) continue;
+
+                float a = prevFrame[HopSize + k];
+                float b = candidateFrame[idxCandidate];
+                corr += a * b;
+                norm += b * b;
+            }
+
+            double normCorr = corr / Math.Sqrt(norm);
+            if (normCorr > bestCorr)
+            {
+                bestCorr    = normCorr;
+                finalOffset = delta;
+            }
+        }
+
+        return finalOffset;
     }
 
     // ── Ring-buffer helpers ──────────────────────────────────────────────────
