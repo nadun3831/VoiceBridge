@@ -1,17 +1,17 @@
 <Window x:Class="VoiceBridge.UI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="VoiceBridge - Real-Time Voice Processing &amp; Virtual Microphone"
-        Height="740" Width="1120"
-        MinHeight="680" MinWidth="980"
+        Title="VoiceBridge - Studio Voice Processing Rack"
+        Height="780" Width="1160"
+        MinHeight="700" MinWidth="1020"
         Background="{StaticResource BgDarkBrush}"
         WindowStartupLocation="CenterScreen">
 
-    <Grid Margin="24">
+    <Grid Margin="20">
         <Grid.RowDefinitions>
-            <!-- Top Navigation & Header -->
+            <!-- Top Header & Controls -->
             <RowDefinition Height="Auto"/>
-            <!-- Main Content Area -->
+            <!-- Main Content Grid -->
             <RowDefinition Height="*"/>
             <!-- Status Bar Footer -->
             <RowDefinition Height="Auto"/>
@@ -20,7 +20,7 @@
         <!-- ═════════════════════════════════════════════════════════════════ -->
         <!-- TOP HEADER & CONTROLS                                             -->
         <!-- ═════════════════════════════════════════════════════════════════ -->
-        <Border Grid.Row="0" Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="10" Padding="18,14" Margin="0,0,0,20">
+        <Border Grid.Row="0" Background="{StaticResource HeaderBgGradient}" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="12" Padding="20,16" Margin="0,0,0,20">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -28,18 +28,28 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
+                <!-- Branding & Title -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="🎙️ VoiceBridge" Foreground="{StaticResource AccentCyanBrush}" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
-                    <Border Background="#1A222D" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="12" Padding="12,4" Margin="20,0,0,0" VerticalAlignment="Center">
+                    <Border Width="36" Height="36" CornerRadius="8" Background="#18202C" BorderBrush="{StaticResource AccentCyanBrush}" BorderThickness="1" Margin="0,0,12,0" VerticalAlignment="Center">
+                        <TextBlock Text="🎙️" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="VOICEBRIDGE" Foreground="{StaticResource AccentCyanBrush}" FontSize="20" FontWeight="Black" LetterSpacing="1.5"/>
+                        <TextBlock Text="DSP HARDWARE VIRTUAL RACK" Foreground="{StaticResource TextMutedBrush}" FontSize="10" FontWeight="Bold"/>
+                    </StackPanel>
+
+                    <!-- Engine Active Pill Status -->
+                    <Border Background="#0D1117" BorderBrush="{StaticResource AccentCyanBrush}" BorderThickness="1" CornerRadius="16" Padding="14,5" Margin="24,0,0,0" VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal">
-                            <Ellipse Width="8" Height="8" Fill="{StaticResource AccentGreenBrush}" Margin="0,0,6,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding EngineState}" Foreground="{StaticResource AccentGreenBrush}" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <Ellipse Width="9" Height="9" Fill="{StaticResource AccentGreenBrush}" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding EngineState}" Foreground="{StaticResource AccentGreenBrush}" FontSize="11" FontWeight="Black" CharacterSpacing="100"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
 
-                <StackPanel Grid.Column="2" Orientation="Horizontal">
-                    <Button Content="Bypass Effects" Command="{Binding ToggleBypassCommand}" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,12,0"/>
+                <!-- Action Controls -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="⚡ Bypass Effects" Command="{Binding ToggleBypassCommand}" Style="{StaticResource SecondaryButtonStyle}" Margin="0,0,12,0"/>
                     <Button Content="{Binding EngineButtonText}" Command="{Binding ToggleEngineCommand}" Style="{StaticResource PrimaryButtonStyle}"/>
                 </StackPanel>
             </Grid>
@@ -51,149 +61,175 @@
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <!-- Left Panel: Devices & VU Metering -->
-                <ColumnDefinition Width="360"/>
+                <ColumnDefinition Width="380"/>
                 <!-- Right Panel: Voice Presets & DSP Effects -->
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <!-- LEFT PANEL -->
-            <StackPanel Grid.Column="0" Margin="0,0,14,0">
+            <StackPanel Grid.Column="0" Margin="0,0,16,0">
                 <!-- Card 1: Audio Device Routing -->
-                <Border Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="10" Padding="18" Margin="0,0,0,16">
+                <Border Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="12" Padding="20" Margin="0,0,0,16">
                     <StackPanel>
-                        <TextBlock Text="Audio Hardware Routing" Foreground="{StaticResource TextPrimaryBrush}" FontSize="16" FontWeight="Bold" Margin="0,0,0,14"/>
+                        <Grid Margin="0,0,0,14">
+                            <TextBlock Text="AUDIO HARDWARE ROUTING" Foreground="{StaticResource AccentCyanBrush}" FontSize="13" FontWeight="Black" CharacterSpacing="50"/>
+                            <Ellipse Width="6" Height="6" Fill="{StaticResource CardBorderBrush}" HorizontalAlignment="Right"/>
+                        </Grid>
 
                         <!-- Input Device Selector -->
-                        <TextBlock Text="Physical Microphone Input" Foreground="{StaticResource TextMutedBrush}" FontSize="12" Margin="0,0,0,6"/>
-                        <ComboBox ItemsSource="{Binding Devices.InputDevices}" DisplayMemberPath="Name" SelectedItem="{Binding Devices.SelectedInputDevice}" Margin="0,0,0,14" Height="34"/>
+                        <TextBlock Text="PHYSICAL MICROPHONE INPUT" Foreground="{StaticResource TextMutedBrush}" FontSize="11" FontWeight="Bold" Margin="0,0,0,6"/>
+                        <ComboBox ItemsSource="{Binding Devices.InputDevices}" DisplayMemberPath="Name" SelectedItem="{Binding Devices.SelectedInputDevice}" Margin="0,0,0,14" Height="36"/>
 
                         <!-- Output Device Selector -->
-                        <TextBlock Text="Playback / Virtual Output" Foreground="{StaticResource TextMutedBrush}" FontSize="12" Margin="0,0,0,6"/>
-                        <ComboBox ItemsSource="{Binding Devices.OutputDevices}" DisplayMemberPath="Name" SelectedItem="{Binding Devices.SelectedOutputDevice}" Margin="0,0,0,14" Height="34"/>
+                        <TextBlock Text="PLAYBACK / VIRTUAL OUTPUT" Foreground="{StaticResource TextMutedBrush}" FontSize="11" FontWeight="Bold" Margin="0,0,0,6"/>
+                        <ComboBox ItemsSource="{Binding Devices.OutputDevices}" DisplayMemberPath="Name" SelectedItem="{Binding Devices.SelectedOutputDevice}" Margin="0,0,0,14" Height="36"/>
 
                         <!-- Audio Monitoring (Hear Myself) Toggle -->
                         <CheckBox Content="🎧 Hear Myself (Audio Monitoring)" 
                                   IsChecked="{Binding IsFeedbackEnabled, Mode=TwoWay}" 
                                   Foreground="{StaticResource TextPrimaryBrush}" 
-                                  FontSize="13" FontWeight="SemiBold" 
+                                  FontSize="12" FontWeight="Bold" 
                                   Cursor="Hand"
-                                  Margin="0,0,0,14"/>
+                                  Margin="0,2,0,14"/>
 
-                        <!-- Virtual Driver Status -->
-                        <Border Background="#121820" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12,10">
+                        <!-- Virtual Driver Status Badge -->
+                        <Border Background="#0D1117" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="14,10">
                             <Grid>
-                                <TextBlock Text="🔌 Virtual Cable Driver:" Foreground="{StaticResource TextMutedBrush}" FontSize="12" VerticalAlignment="Center"/>
-                                <TextBlock Text="Detected &amp; Ready" Foreground="{StaticResource AccentGreenBrush}" FontSize="12" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <TextBlock Text="🔌 Virtual Cable Driver:" Foreground="{StaticResource TextMutedBrush}" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                <TextBlock Text="CONNECTED &amp; READY" Foreground="{StaticResource AccentGreenBrush}" FontSize="11" FontWeight="Black" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                             </Grid>
                         </Border>
                     </StackPanel>
                 </Border>
 
                 <!-- Card 2: Live Peak Metering -->
-                <Border Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="10" Padding="18">
+                <Border Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="12" Padding="20">
                     <StackPanel>
-                        <TextBlock Text="Live VU Peak Metering" Foreground="{StaticResource TextPrimaryBrush}" FontSize="16" FontWeight="Bold" Margin="0,0,0,16"/>
+                        <Grid Margin="0,0,0,16">
+                            <TextBlock Text="LIVE VU PEAK METERING" Foreground="{StaticResource AccentCyanBrush}" FontSize="13" FontWeight="Black" CharacterSpacing="50"/>
+                            <Ellipse Width="6" Height="6" Fill="{StaticResource CardBorderBrush}" HorizontalAlignment="Right"/>
+                        </Grid>
 
                         <!-- Input Meter -->
-                        <TextBlock Text="Input Microphone Level" Foreground="{StaticResource TextMutedBrush}" FontSize="12" Margin="0,0,0,6"/>
-                        <Grid Margin="0,0,0,14">
+                        <TextBlock Text="Input Microphone Level" Foreground="{StaticResource TextMutedBrush}" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,6"/>
+                        <Grid Margin="0,0,0,16">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="55"/>
+                                <ColumnDefinition Width="65"/>
                             </Grid.ColumnDefinitions>
-                            <ProgressBar Grid.Column="0" Minimum="-60" Maximum="0" Value="{Binding InputPeakDb}" Style="{StaticResource VuMeterBarStyle}" Height="12" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="{Binding InputPeakDb, StringFormat={}{0:F1} dB}" Foreground="{StaticResource TextPrimaryBrush}" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <ProgressBar Grid.Column="0" Minimum="-60" Maximum="0" Value="{Binding InputPeakDb}" Style="{StaticResource VuMeterBarStyle}" Height="14" VerticalAlignment="Center"/>
+                            <Border Grid.Column="1" Background="#0D1117" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6,2" HorizontalAlignment="Right">
+                                <TextBlock Text="{Binding InputPeakDb, StringFormat={}{0:F1} dB}" Foreground="{StaticResource AccentCyanBrush}" FontSize="11" FontWeight="Bold"/>
+                            </Border>
                         </Grid>
 
                         <!-- Output Meter -->
-                        <TextBlock Text="Processed Output Level" Foreground="{StaticResource TextMutedBrush}" FontSize="12" Margin="0,0,0,6"/>
+                        <TextBlock Text="Processed Output Level" Foreground="{StaticResource TextMutedBrush}" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,6"/>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="55"/>
+                                <ColumnDefinition Width="65"/>
                             </Grid.ColumnDefinitions>
-                            <ProgressBar Grid.Column="0" Minimum="-60" Maximum="0" Value="{Binding OutputPeakDb}" Style="{StaticResource VuMeterBarStyle}" Height="12" VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="1" Text="{Binding OutputPeakDb, StringFormat={}{0:F1} dB}" Foreground="{StaticResource TextPrimaryBrush}" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <ProgressBar Grid.Column="0" Minimum="-60" Maximum="0" Value="{Binding OutputPeakDb}" Style="{StaticResource VuMeterBarStyle}" Height="14" VerticalAlignment="Center"/>
+                            <Border Grid.Column="1" Background="#0D1117" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="4" Padding="6,2" HorizontalAlignment="Right">
+                                <TextBlock Text="{Binding OutputPeakDb, StringFormat={}{0:F1} dB}" Foreground="{StaticResource AccentGreenBrush}" FontSize="11" FontWeight="Bold"/>
+                            </Border>
                         </Grid>
                     </StackPanel>
                 </Border>
             </StackPanel>
 
             <!-- RIGHT PANEL -->
-            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Margin="14,0,0,0">
+            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Margin="0,0,0,0">
                 <StackPanel>
                     <!-- Card 3: Voice Presets -->
-                    <Border Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="10" Padding="18" Margin="0,0,0,16">
+                    <Border Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="12" Padding="20" Margin="0,0,0,16">
                         <StackPanel>
-                            <TextBlock Text="Voice Profile Presets" Foreground="{StaticResource TextPrimaryBrush}" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
-                            <ComboBox ItemsSource="{Binding Presets.Presets}" DisplayMemberPath="Name" SelectedItem="{Binding Presets.SelectedPreset}" Height="34" Margin="0,0,0,10"/>
-                            <TextBlock Text="{Binding Presets.SelectedPreset.Description}" Foreground="{StaticResource TextMutedBrush}" FontSize="12" TextWrapping="Wrap"/>
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="VOICE PROFILE PRESETS" Foreground="{StaticResource AccentCyanBrush}" FontSize="13" FontWeight="Black" CharacterSpacing="50"/>
+                                <Ellipse Width="6" Height="6" Fill="{StaticResource CardBorderBrush}" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <ComboBox ItemsSource="{Binding Presets.Presets}" DisplayMemberPath="Name" SelectedItem="{Binding Presets.SelectedPreset}" Height="36" Margin="0,0,0,10"/>
+                            <TextBlock Text="{Binding Presets.SelectedPreset.Description}" Foreground="{StaticResource TextMutedBrush}" FontSize="12" TextWrapping="Wrap" LineHeight="18"/>
                         </StackPanel>
                     </Border>
 
                     <!-- Card 4: Real-Time DSP Effect Sliders -->
-                    <Border Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="10" Padding="18">
+                    <Border Background="{StaticResource CardBgBrush}" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="12" Padding="20">
                         <StackPanel>
-                            <TextBlock Text="Real-Time DSP Effects Chain" Foreground="{StaticResource TextPrimaryBrush}" FontSize="16" FontWeight="Bold" Margin="0,0,0,18"/>
+                            <Grid Margin="0,0,0,20">
+                                <TextBlock Text="REAL-TIME DSP EFFECTS CHAIN" Foreground="{StaticResource AccentCyanBrush}" FontSize="13" FontWeight="Black" CharacterSpacing="50"/>
+                                <Ellipse Width="6" Height="6" Fill="{StaticResource CardBorderBrush}" HorizontalAlignment="Right"/>
+                            </Grid>
 
                             <!-- Gain Control -->
-                            <Grid Margin="0,0,0,18">
+                            <Grid Margin="0,0,0,20">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="160"/>
+                                    <ColumnDefinition Width="170"/>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="70"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Input Gain Factor" Foreground="{StaticResource TextPrimaryBrush}" FontSize="13" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="0" Text="Input Gain Factor" Foreground="{StaticResource TextPrimaryBrush}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                 <Slider Grid.Column="1" Minimum="0.0" Maximum="2.0" Value="{Binding Effects.GainFactor}" SmallChange="0.05" LargeChange="0.1" VerticalAlignment="Center"/>
-                                <TextBlock Grid.Column="2" Text="{Binding Effects.GainFactor, StringFormat={}{0:F2}x}" Foreground="{StaticResource AccentCyanBrush}" FontSize="13" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <Border Grid.Column="2" Background="#0D1117" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="6" Padding="6,4" HorizontalAlignment="Right">
+                                    <TextBlock Text="{Binding Effects.GainFactor, StringFormat={}{0:F2}x}" Foreground="{StaticResource AccentCyanBrush}" FontSize="12" FontWeight="Bold"/>
+                                </Border>
                             </Grid>
 
                             <!-- Noise Gate Threshold -->
-                            <Grid Margin="0,0,0,18">
+                            <Grid Margin="0,0,0,20">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="160"/>
+                                    <ColumnDefinition Width="170"/>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="70"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Noise Gate Threshold" Foreground="{StaticResource TextPrimaryBrush}" FontSize="13" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="0" Text="Noise Gate Threshold" Foreground="{StaticResource TextPrimaryBrush}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                 <Slider Grid.Column="1" Minimum="-80.0" Maximum="0.0" Value="{Binding Effects.GateThresholdDb}" SmallChange="1" LargeChange="5" VerticalAlignment="Center"/>
-                                <TextBlock Grid.Column="2" Text="{Binding Effects.GateThresholdDb, StringFormat={}{0:F0} dB}" Foreground="{StaticResource AccentCyanBrush}" FontSize="13" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <Border Grid.Column="2" Background="#0D1117" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="6" Padding="6,4" HorizontalAlignment="Right">
+                                    <TextBlock Text="{Binding Effects.GateThresholdDb, StringFormat={}{0:F0} dB}" Foreground="{StaticResource AccentCyanBrush}" FontSize="12" FontWeight="Bold"/>
+                                </Border>
                             </Grid>
 
                             <!-- Pitch Shift -->
-                            <Grid Margin="0,0,0,18">
+                            <Grid Margin="0,0,0,20">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="160"/>
+                                    <ColumnDefinition Width="170"/>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="70"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Pitch Shift (Semitones)" Foreground="{StaticResource TextPrimaryBrush}" FontSize="13" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="0" Text="Pitch Shift (Semitones)" Foreground="{StaticResource TextPrimaryBrush}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                 <Slider Grid.Column="1" Minimum="-12.0" Maximum="12.0" Value="{Binding Effects.PitchSemitones}" SmallChange="1" LargeChange="2" VerticalAlignment="Center"/>
-                                <TextBlock Grid.Column="2" Text="{Binding Effects.PitchSemitones, StringFormat={}{0:F0} st}" Foreground="{StaticResource AccentCyanBrush}" FontSize="13" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <Border Grid.Column="2" Background="#0D1117" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="6" Padding="6,4" HorizontalAlignment="Right">
+                                    <TextBlock Text="{Binding Effects.PitchSemitones, StringFormat={}{0:F0} st}" Foreground="{StaticResource AccentPurpleBrush}" FontSize="12" FontWeight="Bold"/>
+                                </Border>
                             </Grid>
 
                             <!-- Delay Time -->
-                            <Grid Margin="0,0,0,18">
+                            <Grid Margin="0,0,0,20">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="160"/>
+                                    <ColumnDefinition Width="170"/>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="70"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Delay Time (ms)" Foreground="{StaticResource TextPrimaryBrush}" FontSize="13" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="0" Text="Delay Time (ms)" Foreground="{StaticResource TextPrimaryBrush}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                 <Slider Grid.Column="1" Minimum="10.0" Maximum="1000.0" Value="{Binding Effects.DelayMs}" SmallChange="10" LargeChange="50" VerticalAlignment="Center"/>
-                                <TextBlock Grid.Column="2" Text="{Binding Effects.DelayMs, StringFormat={}{0:F0} ms}" Foreground="{StaticResource AccentCyanBrush}" FontSize="13" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <Border Grid.Column="2" Background="#0D1117" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="6" Padding="6,4" HorizontalAlignment="Right">
+                                    <TextBlock Text="{Binding Effects.DelayMs, StringFormat={}{0:F0} ms}" Foreground="{StaticResource AccentCyanBrush}" FontSize="12" FontWeight="Bold"/>
+                                </Border>
                             </Grid>
 
                             <!-- Reverb Room Size -->
                             <Grid Margin="0,0,0,8">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="160"/>
+                                    <ColumnDefinition Width="170"/>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="70"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Reverb Room Size" Foreground="{StaticResource TextPrimaryBrush}" FontSize="13" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="0" Text="Reverb Room Size" Foreground="{StaticResource TextPrimaryBrush}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                 <Slider Grid.Column="1" Minimum="0.0" Maximum="1.0" Value="{Binding Effects.ReverbRoomSize}" SmallChange="0.05" LargeChange="0.1" VerticalAlignment="Center"/>
-                                <TextBlock Grid.Column="2" Text="{Binding Effects.ReverbRoomSize, StringFormat={}{0:P0}}" Foreground="{StaticResource AccentCyanBrush}" FontSize="13" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                <Border Grid.Column="2" Background="#0D1117" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="6" Padding="6,4" HorizontalAlignment="Right">
+                                    <TextBlock Text="{Binding Effects.ReverbRoomSize, StringFormat={}{0:P0}}" Foreground="{StaticResource AccentGreenBrush}" FontSize="12" FontWeight="Bold"/>
+                                </Border>
                             </Grid>
                         </StackPanel>
                     </Border>
@@ -204,11 +240,15 @@
         <!-- ═════════════════════════════════════════════════════════════════ -->
         <!-- STATUS FOOTER                                                     -->
         <!-- ═════════════════════════════════════════════════════════════════ -->
-        <Border Grid.Row="2" Background="#12151A" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="14,10" Margin="0,20,0,0">
+        <Border Grid.Row="2" Background="{StaticResource HeaderBgGradient}" BorderBrush="{StaticResource CardBorderBrush}" BorderThickness="1" CornerRadius="10" Padding="16,12" Margin="0,16,0,0">
             <Grid>
-                <TextBlock Text="{Binding StatusText}" Foreground="{StaticResource TextMutedBrush}" FontSize="12" VerticalAlignment="Center"/>
-                <TextBlock Text="Target Latency: &lt;20ms | WASAPI 48kHz Stereo" Foreground="{StaticResource TextMutedBrush}" FontSize="11" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Ellipse Width="7" Height="7" Fill="{StaticResource AccentGreenBrush}" Margin="0,0,8,0"/>
+                    <TextBlock Text="{Binding StatusText}" Foreground="{StaticResource TextPrimaryBrush}" FontSize="12" FontWeight="SemiBold"/>
+                </StackPanel>
+                <TextBlock Text="Zero-Latency Engine | WASAPI Exclusive 48kHz Stereo" Foreground="{StaticResource TextMutedBrush}" FontSize="11" FontWeight="Bold" HorizontalAlignment="Right" VerticalAlignment="Center"/>
             </Grid>
         </Border>
     </Grid>
 </Window>
+
